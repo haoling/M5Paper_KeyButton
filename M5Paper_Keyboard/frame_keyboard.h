@@ -4,11 +4,11 @@
 #include "frame_base.h"
 #include "epdgui.h"
 
-class Frame_Keyboard : public Frame_Base
+class Frame_KeyButton : public Frame_Base
 {
 public:
-    Frame_Keyboard();
-    ~Frame_Keyboard();
+    Frame_KeyButton();
+    ~Frame_KeyButton();
     int run();
     int init(epdgui_args_vector_t &args);
 

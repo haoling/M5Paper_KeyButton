@@ -9,6 +9,8 @@
 BleKeyboard bleKeyboard("M5Paper-Keyboard", "Espressif", 100);
 #endif
 
+
+
 void setup()
 {
     M5.begin();
@@ -21,8 +23,8 @@ void setup()
     initcanvas.loadFont(binaryttf, sizeof(binaryttf));
     initcanvas.setTextSize(26);
     initcanvas.createRender(26, 128);
-    Frame_Base *frame = new Frame_Keyboard();
-    EPDGUI_AddFrame("Frame_Keyboard", frame);
+    Frame_Base *frame = new Frame_KeyButton();
+    EPDGUI_AddFrame("Frame_KeyButton", frame);
 
     EPDGUI_PushFrame(frame);
 
