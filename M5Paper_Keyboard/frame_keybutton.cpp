@@ -1,4 +1,4 @@
-#include "frame_keyboard.h"
+#include "frame_keybutton.h"
 #include "keyboard_config.h"
 #ifdef USE_BLE_KEYBOARD
 #include <BleKeyboard.h>
@@ -36,7 +36,7 @@ int Frame_KeyButton::run(void)
     char buf[20];
     _canvas_title->fillCanvas(0);
     _canvas_title->setTextDatum(CC_DATUM);
-    _canvas_title->drawString("M5Paper Keyboard", 250, 34);
+    _canvas_title->drawString("M5Paper KeyButton", 250, 34);
 
     // Battery
     _canvas_title->setTextDatum(CR_DATUM);
@@ -86,33 +86,6 @@ int Frame_KeyButton::run(void)
 #ifdef USE_BLE_KEYBOARD
   if (bleKeyboard.isConnected())
   {
-    int8_t ctrlKey = keyboard->getCtrlKey();
-    if (ctrlKey > 0)
-    {
-      bleKeyboard.press(KEY_LEFT_CTRL);
-    }
-    else if (ctrlKey < 0)
-    {
-      bleKeyboard.release(KEY_LEFT_CTRL);
-    }
-    int8_t switchKey = keyboard->getSwitchKey();
-    if (switchKey > 0)
-    {
-      bleKeyboard.press(KEY_LEFT_ALT);
-    }
-    else if (switchKey < 0)
-    {
-      bleKeyboard.release(KEY_LEFT_ALT);
-    }
-    int8_t shiftKey = keyboard->getShiftKey();
-    if (shiftKey > 0)
-    {
-      bleKeyboard.press(KEY_LEFT_SHIFT);
-    }
-    else if (shiftKey < 0)
-    {
-      bleKeyboard.release(KEY_LEFT_SHIFT);
-    }
     bleKeyboard.print(text);
   }
 #else
