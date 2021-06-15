@@ -1,1 +1,1 @@
-//#define USE_BLE_KEYBOARD
+#define USE_BLE_KEYBOARD
