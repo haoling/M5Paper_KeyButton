@@ -13,11 +13,11 @@ static void buttonReleasedCb(epdgui_args_vector_t& args)
 
 EPDGUI_Keyboard::EPDGUI_Keyboard() : EPDGUI_Base()
 {
-    const uint16_t kKeyWidth = 72;
-    const uint16_t kKeyHeight = 84;
+    const uint16_t kKeyWidth = 140;
+    const uint16_t kKeyHeight = 240;
     const uint16_t kKeyInterval = 8;
     const uint16_t kFirstLineY = 122;
-    const uint16_t kBaseX = 120;
+    const uint16_t kBaseX = 60;
 
     for (int i = 0; i < 5; i++)
     {
