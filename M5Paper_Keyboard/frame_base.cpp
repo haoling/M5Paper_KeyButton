@@ -6,10 +6,10 @@ Frame_Base::Frame_Base(bool _has_title)
     if(_has_title)
     {
         _canvas_title = new M5EPD_Canvas(&M5.EPD);
-        _canvas_title->createCanvas(540, 64);
-        _canvas_title->drawFastHLine(0, 64, 540, 15);
-        _canvas_title->drawFastHLine(0, 63, 540, 15);
-        _canvas_title->drawFastHLine(0, 62, 540, 15);
+        _canvas_title->createCanvas(640, 64);
+        _canvas_title->drawFastHLine(0, 64, 640, 15);
+        _canvas_title->drawFastHLine(0, 63, 640, 15);
+        _canvas_title->drawFastHLine(0, 62, 640, 15);
         _canvas_title->setTextSize(26);
         _canvas_title->setTextDatum(CC_DATUM);
     }
