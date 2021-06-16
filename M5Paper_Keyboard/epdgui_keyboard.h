@@ -2,7 +2,10 @@
 #define __EPDGUI_KEYBOARD_H
 
 #include "epdgui_button.h"
-#include "epdgui_switch.h"
+
+const uint8_t KEY_NOACTION = 0x00;
+const uint8_t KEY_PRESSED = 0x01;
+const uint8_t KEY_RELEASED = 0x02;
 
 class EPDGUI_Keyboard: public EPDGUI_Base
 {
@@ -13,14 +16,13 @@ public:
     void Draw(M5EPD_Canvas* canvas);
     void Bind(int16_t event, void (* func_cb)(epdgui_args_vector_t&));
     void UpdateState(int16_t x, int16_t y);
-    String getData(void);
+    uint8_t getState(uint8_t buttonNum);
+    void onButtonPressed(EPDGUI_Button *button);
+    void onButtonReleased(EPDGUI_Button *button);
 
 private:
     EPDGUI_Button *_btn[5];
-    EPDGUI_Base *_key[5];
-    String _data;
-
-public:
+    uint8_t _state[5];
 
 };
 

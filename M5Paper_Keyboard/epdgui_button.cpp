@@ -139,7 +139,7 @@ void EPDGUI_Button::UpdateState(int16_t x, int16_t y)
         if(_state == EVENT_NONE)
         {
             _state = EVENT_PRESSED;
-            // Serial.printf("%s Pressed ", _label.c_str());
+            Serial.printf("%s Pressed ", _label.c_str());
             Draw();
             if(_pressed_cb != NULL)
             {

@@ -81,15 +81,26 @@ int Frame_KeyButton::run(void)
     _next_update_time = (60 - time_struct.sec) * 1000;
   }
 
-  String text = keyboard->getData();
-  Serial.print(text);
+  for (int i = 0; i < 5; i++) {
+    uint8_t state = keyboard->getState(i);
+    if (state != 0) {
+      Serial.printf("button%d: %d\n", i, state);
+    }
 #ifdef USE_BLE_KEYBOARD
-  if (bleKeyboard.isConnected())
-  {
-    bleKeyboard.print(text);
-  }
-#else
-  Serial2.print(text);
+    if (bleKeyboard.isConnected())
+    {
+      switch (i) {
+      case 0:
+        if (state == KEY_PRESSED) {
+          bleKeyboard.press(KEY_RIGHT_CTRL);
+          bleKeyboard.press(KEY_F8);
+        } else if (state == KEY_RELEASED) {
+          bleKeyboard.release(KEY_F8);
+          bleKeyboard.release(KEY_RIGHT_CTRL);
+        }
+      }
+    }
 #endif
+  }
   return 1;
 }

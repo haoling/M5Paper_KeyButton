@@ -1,9 +1,15 @@
 #include "epdgui_keyboard.h"
 #include "keyboard_config.h"
 
-static const char *kKeyAlphaMapLowerCase[5] = {
-    "q", "w", "e", "r", "t"
-};
+static void buttonPressedCb(epdgui_args_vector_t& args)
+{
+    ((EPDGUI_Keyboard *)args[0])->onButtonPressed((EPDGUI_Button *)args[1]);
+}
+
+static void buttonReleasedCb(epdgui_args_vector_t& args)
+{
+    ((EPDGUI_Keyboard *)args[0])->onButtonReleased((EPDGUI_Button *)args[1]);
+}
 
 EPDGUI_Keyboard::EPDGUI_Keyboard() : EPDGUI_Base()
 {
@@ -17,11 +23,15 @@ EPDGUI_Keyboard::EPDGUI_Keyboard() : EPDGUI_Base()
     {
         String name = String(i);
         _btn[i] = new EPDGUI_Button(name, kBaseX + (kKeyInterval + kKeyWidth) * i, kFirstLineY, kKeyWidth, kKeyHeight);
-    }
+        _state[i] = KEY_NOACTION;
 
-    for (int i = 0; i < 5; i++)
-    {
-        _key[i] = _btn[i];
+        _btn[i]->Bind(EPDGUI_Button::EVENT_PRESSED, buttonPressedCb);
+        _btn[i]->AddArgs(EPDGUI_Button::EVENT_PRESSED, 0, this);
+        _btn[i]->AddArgs(EPDGUI_Button::EVENT_PRESSED, 1, _btn[i]);
+
+        _btn[i]->Bind(EPDGUI_Button::EVENT_RELEASED, buttonReleasedCb);
+        _btn[i]->AddArgs(EPDGUI_Button::EVENT_RELEASED, 0, this);
+        _btn[i]->AddArgs(EPDGUI_Button::EVENT_RELEASED, 1, _btn[i]);
     }
 }
 
@@ -41,7 +51,7 @@ void EPDGUI_Keyboard::Draw(m5epd_update_mode_t mode)
     }
     for (int i = 0; i < 5; i++)
     {
-        _key[i]->Draw(mode);
+        _btn[i]->Draw(mode);
     }
 }
 
@@ -53,7 +63,7 @@ void EPDGUI_Keyboard::Draw(M5EPD_Canvas *canvas)
     }
     for (int i = 0; i < 5; i++)
     {
-        _key[i]->Draw(canvas);
+        _btn[i]->Draw(canvas);
     }
 }
 
@@ -70,22 +80,35 @@ void EPDGUI_Keyboard::UpdateState(int16_t x, int16_t y)
     // log_d("UpdateState %d, %d", x, y);
     for (int i = 0; i < 5; i++)
     {
-        bool keypressed = _key[i]->isInBox(x, y);
-        _key[i]->UpdateState(x, y);
-        if (keypressed)
-        {
-            if (i < 26)
-            {
-                _data = kKeyAlphaMapLowerCase[i];
-                break;
-            }
+        _btn[i]->UpdateState(x, y);
+    }
+}
+
+uint8_t EPDGUI_Keyboard::getState(uint8_t buttonNum)
+{
+    uint8_t state = _state[buttonNum];
+    _state[buttonNum] = KEY_NOACTION;
+    return state;
+}
+
+void EPDGUI_Keyboard::onButtonPressed(EPDGUI_Button *button)
+{
+    Serial.println("EPDGUI_Keyboard::buttonPressedCb: " + button->getLabel());
+    for (int i = 0; i < 5; i++) {
+        if (_btn[i] == button) {
+            _state[i] = KEY_PRESSED;
+            break;
         }
     }
 }
 
-String EPDGUI_Keyboard::getData(void)
+void EPDGUI_Keyboard::onButtonReleased(EPDGUI_Button *button)
 {
-    String data = _data;
-    _data = "";
-    return data;
+    Serial.println("EPDGUI_Keyboard::onButtonReleased: " + button->getLabel());
+    for (int i = 0; i < 5; i++) {
+        if (_btn[i] == button) {
+            _state[i] = KEY_RELEASED;
+            break;
+        }
+    }
 }
